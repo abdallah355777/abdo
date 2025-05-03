@@ -1,0 +1,59 @@
+<?php
+// Include the header
+include('header.php');
+
+// Connect to the database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "shop";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get the form data
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Encrypt password
+
+    // Check if email already exists
+    $check_sql = "SELECT * FROM users WHERE email = '$email'";
+    $check_result = $conn->query($check_sql);
+
+    if ($check_result->num_rows > 0) {
+        // Email already exists
+        echo "<p style='color:red;'>Email is already registered. Please use a different one.</p>";
+    } else {
+        // Insert data into the users table
+        $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', 'customer')";
+        
+        if ($conn->query($sql) === TRUE) {
+            echo "<p style='color:green;'>Registration successful! <a href='login.php'>Login here</a></p>";
+        } else {
+            echo "<p style='color:red;'>Error: " . $conn->error . "</p>";
+        }
+    }
+}
+?> 
+
+<h2>Create an Account</h2>
+<form method="POST">
+    <label for="name">Full Name</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="email">Email</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+    <label for="password">Password</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+    <input type="submit" value="Register">
+</form>
+
+<?php
+// Include the footer
+include('footer.php');
+?>
