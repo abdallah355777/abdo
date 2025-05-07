@@ -1,6 +1,6 @@
 <?php
 // Include the header
-include('header.php');
+include'header.php';
 
 // Start session for user check
 session_start();
@@ -40,5 +40,4 @@ if ($result->num_rows > 0) {
 }
 
 // Include the footer
-include('footer.php');
-?>
+include'footer.php';

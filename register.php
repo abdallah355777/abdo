@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Insert data into the users table
         $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', 'customer')";
-        
+
         if ($conn->query($sql) === TRUE) {
             echo "<p style='color:green;'>Registration successful! <a href='login.php'>Login here</a></p>";
         } else {
@@ -40,18 +40,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-?> 
+?>
 
-<h2>Create an Account</h2>
-<form method="POST">
-    <label for="name">Full Name</label><br>
-    <input type="text" id="name" name="name" required><br><br>
-    <label for="email">Email</label><br>
-    <input type="email" id="email" name="email" required><br><br>
-    <label for="password">Password</label><br>
-    <input type="password" id="password" name="password" required><br><br>
-    <input type="submit" value="Register">
-</form>
+<section class="login">
+    <div>
+        <h2>Create an Account</h2>
+        <form method="POST">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <p>You already have an account? <a href="login.php">Login</a> here.</p>
+    </div>
+</section>
 
 <?php
 // Include the footer

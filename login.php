@@ -1,6 +1,6 @@
 <?php
 // Include the header
-include('header.php');
+include 'header.php';
 
 // Start session for login check
 session_start();
@@ -30,7 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: index.php');
             exit();
         } else {
-            echo "Invalid password!";
+            echo "<div class='error'>";
+            echo "<p>Invalid password!</p>";
+            echo "</div>";
         }
     } else {
         echo "No user found with this email!";
@@ -38,16 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<h2>Login</h2>
-<form method="POST">
-    <label for="email">Email</label><br>
-    <input type="email" id="email" name="email" required><br><br>
-    <label for="password">Password</label><br>
-    <input type="password" id="password" name="password" required><br><br>
-    <input type="submit" value="Login">
-</form>
+<section class="login">
+    <div>
+        <h2>Login</h2>
+        <form method="POST">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit" value="Login">Login</button>
+        </form>
+
+        <p>You don't an account? <a href="register.php">Register</a> here.</p>
+    </div>
+</section>
+
 
 <?php
 // Include the footer
-include('footer.php');
+include 'footer.php';
 ?>
