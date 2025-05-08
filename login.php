@@ -3,7 +3,9 @@
 include 'header.php';
 
 // Start session for login check
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Connect to the database
 $servername = "localhost";

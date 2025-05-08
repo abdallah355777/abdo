@@ -3,7 +3,9 @@
 include 'header.php';
 
 // Start session for user check
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Redirect to login page if not logged in
 if (!isset($_SESSION['user_id'])) {
@@ -18,21 +20,6 @@ $password = "";
 $dbname = "shop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
-    $user_id = $_SESSION['user_id'];
-
-    // Insert order into the orders table
-    $sql = "INSERT INTO orders (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Order placed successfully!";
-    } else {
-        echo "Error placing order: " . $conn->error;
-    }
-}
 ?>
 
 <main class="cart">
@@ -45,12 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <th>Name</th>
                         <th>Quantity</th>
                         <th>Subtotal</th>
+                        <th></th>
                     </tr>
                     <?php
+                    $subtotal = 0;
+
                     $user_id = $_SESSION['user_id'] ?? null;
 
                     $sql_orders = "SELECT * FROM orders WHERE user_id = '$user_id'";
                     $result_orders = $conn->query($sql_orders);
+
+
+                    if (isset($_POST['remove_item']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+                        $item_id = intval($_POST['item_id']);
+
+                        // Delete Item from cart table
+                        $sql = "DELETE FROM orders WHERE id = '$item_id'";
+                        $conn->query($sql);
+                    }
 
                     if ($result_orders && $result_orders->num_rows > 0) {
                         while ($row = $result_orders->fetch_assoc()) {
@@ -65,31 +64,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "<td>" . htmlspecialchars($product_row['name']) . "</td>";
                                 echo "<td>" . intval($quantity) . "</td>";
                                 echo "<td>$" . number_format($product_row['price'], 2) . "</td>";
+                                echo "<td>
+                                        <form action='' method='POST'>
+                                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                                        <button type='submit' name='remove_item'>X</button>
+                                        </form>
+                                    </td>";
                                 echo "</tr>";
                             } else {
                                 echo "<p>Product not found.</p>";
                             }
+
+                            $subtotal += $product_row['price'] * $quantity;
                         }
-                    } else {
-                        echo "<p>Your cart is empty.</p>";
                     }
                     ?>
                 </table>
             </div>
         </div>
         <div class="cart-bill-info">
-            <table class="cart-bill-list">
+
+            <table>
                 <tr>
-                    <td>subtotal</td>
-                    <td>$200.00</td>
+                    <td>Subtotal</td>
+                    <td>
+                        <?php
+                        echo "$" . number_format($subtotal, 2);
+                        ?>
+                    </td>
                 </tr>
                 <tr>
-                    <td>Tax</td>
-                    <td>$35.00</td>
+                    <td>Tax (10%)</td>
+                    <td>
+                        <?php
+                        $tax = $subtotal * 0.1;
+                        echo "$" . number_format($tax, 2);
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td>Total</td>
-                    <td>$235.00</td>
+                    <td>
+                        <?php
+                        echo "$" . number_format($subtotal + $tax, 2);
+                        ?>
+                    </td>
                 </tr>
             </table>
             <div class="cart-order">

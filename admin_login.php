@@ -1,9 +1,11 @@
 <?php
 // Include the header
-include('header.php');
+include 'header.php';
 
 // Start session for login check
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Connect to the database
 $servername = "localhost";
@@ -12,6 +14,8 @@ $password = "";
 $dbname = "shop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
@@ -30,24 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: admin_dashboard.php');
             exit();
         } else {
-            echo "Invalid password!";
+            $message = "Invalid password!";
         }
     } else {
-        echo "No admin user found with this email!";
+        $message = "No admin user found with this email!";
     }
 }
 ?>
 
-<h2>Admin Login</h2>
-<form method="POST">
-    <label for="email">Email</label><br>
-    <input type="email" id="email" name="email" required><br><br>
-    <label for="password">Password</label><br>
-    <input type="password" id="password" name="password" required><br><br>
-    <input type="submit" value="Login">
-</form>
+<section class="login">
+    <p><?php echo htmlspecialchars($message); ?></p>
+    <div>
+        <h2>Admin Portal</h2>
+        <form method="POST">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit" value="Login">Login</button>
+        </form>
+    </div>
+</section>
 
-<?php
-// Include the footer
-include('footer.php');
-?>
+<?php include 'footer.php'; ?>
