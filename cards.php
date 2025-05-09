@@ -6,7 +6,7 @@ if (isset($_POST['add_to_cart']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
   $user_id = $_SESSION['user_id'];
 
   // Insert order into the orders table
-  $sql = "INSERT INTO orders (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
+  $sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
 
   $conn->query($sql);
 }
@@ -14,7 +14,7 @@ if (isset($_POST['add_to_cart']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
 echo "<div class='cards-wrapper'>";
 while ($row = $result->fetch_assoc()) {
   echo "<div class='card'>";
-  echo "<img src='assets/images/placeholder.jpg' alt='placeholder-image'>";
+  echo "<img src='assets/images/". $row['image'] ."' alt='placeholder-image'>";
   echo "<p>" . $row['description'] . "</p>";
   echo "<h3>" . $row['name'] . "</h3>";
 

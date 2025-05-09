@@ -10,12 +10,12 @@
 
 <body>
     <header class="header-wrapper">
-        <h1><a href="index.php">Abdo's Shop</a></h1>
+        <h1><a href="index.php">ABDO Shop</a></h1>
         <nav>
             <div>
                 <a href="index.php">Home</a>
                 <a href="all_products.php">Products</a>
-                <a href="admin_login.php">About</a>
+                <a href="admin_login.php">Admin Portal</a>
             </div>
         </nav>
         <?php
