@@ -40,7 +40,7 @@ $product = $result->fetch_assoc();
 <body>
   <main class="product-detail">
     <div class="product-image">
-      <img src="/assets/images/placeholder.jpg" alt="Product Image">
+      <img src="assets/images/products/placeholder.jpg" alt="Product Image">
     </div>
     <div class="product-info">
       <h2><?php echo $product['name']; ?></h2>
