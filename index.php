@@ -16,15 +16,19 @@
         <div>
             <h2>Your <span>One-Stop</span> Online Shop.</h2>
             <p>Browse our categories: food, tools, toys, and more — fast delivery, simple ordering.</p>
-            <a href="register.php" class="hero-btn">Create an Account</a>
+            <?php if (!isset($_SESSION['user_id'])): ?>
+                <a href="register.php" class="hero-btn">Create an Account</a>
+            <?php else: ?>
+                <a href="all_products.php" class="hero-btn">Browse product</a>
+            <?php endif; ?>
         </div>
         <div>
             <img src="assets/images/online-store.png" alt="online-store">
         </div>
     </section>
 
-    <?php
 
+    <?php
     // Connect to the database
     $servername = "localhost";
     $username = "root";

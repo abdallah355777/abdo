@@ -15,6 +15,8 @@ $dbname = "shop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+$message = null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -32,15 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: index.php');
             exit();
         } else {
-            echo "<div class='error'>";
-            echo "<p>Invalid password!</p>";
-            echo "</div>";
+            $message = "Invalid password!";
+            include "error.php";
         }
     } else {
-        echo "No user found with this email!";
+        $message = "No user found with this email!";
+        include "error.php";
     }
 }
 ?>
+
 
 <section class="login">
     <div>
