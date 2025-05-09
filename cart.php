@@ -21,6 +21,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 $checkoutSuccess = false;
 if (isset($_POST['checkout'])) {
     $user_id = $_SESSION['user_id'];
+
+    // Generate a unique order group ID for the checkout
+    $order_group_id = time();  // Or use something more unique if you prefer
+
+    // Fetch the cart items
     $sql = "SELECT * FROM cart WHERE user_id = '$user_id'";
     $result = $conn->query($sql);
 
@@ -29,16 +34,16 @@ if (isset($_POST['checkout'])) {
             $product_id = $row['product_id'];
             $quantity = $row['quantity'];
 
-            $insert = $conn->query("INSERT INTO orders (user_id, product_id, quantity, order_date) 
-                                    VALUES ('$user_id', '$product_id', '$quantity', NOW())");
+            // Insert each cart item into the orders table with the same order_group_id
+            $insert = $conn->query("INSERT INTO orders (user_id, product_id, quantity, order_date, order_group_id) 
+                                    VALUES ('$user_id', '$product_id', '$quantity', NOW(), '$order_group_id')");
 
             if (!$insert) {
                 $message = "Error placing order: ' . $conn->error . '";
                 include "error.php";
             }
         }
-        
-        // Clear the cart
+        // Clear the cart after successful checkout
         $conn->query("DELETE FROM cart WHERE user_id = '$user_id'");
         $checkoutSuccess = true;
         
