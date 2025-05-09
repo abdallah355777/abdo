@@ -38,7 +38,7 @@
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     echo "<section class='categories-section'>";
-    echo "<h2>Categories</h2>";
+    echo "<h2>CATEGORIES</h2>";
     echo "<div>";
     $sql = "SELECT * FROM categories";
     $result = $conn->query($sql);

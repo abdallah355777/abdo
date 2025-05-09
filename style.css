@@ -4,6 +4,10 @@
 	--main-color: #141414;
 	--second-color: #ff640b;
 	--sub-color: white;
+
+	--button-color: #ff640b;
+	--button-hover-color: #fca370;
+
 	--border-radius-large: 8px;
 	--border-radius-small: 4px;
 	--border-color: #e0e0e0;
@@ -129,6 +133,7 @@ header .account a:nth-child(2) svg {
 	font-size: 0.75rem;
 	font-weight: bold;
 	transition: all 0.3s;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .header-login-btn:hover {
@@ -165,7 +170,7 @@ header .account a:nth-child(2) svg {
 }
 
 .hero-section div p {
-	color: var(--main-color);
+	color: #686868;
 	font-size: 1rem;
 	margin-bottom: 40px;
 }
@@ -180,6 +185,7 @@ header .account a:nth-child(2) svg {
 	font-size: 0.9rem;
 	font-weight: bold;
 	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .hero-btn:hover {
@@ -299,6 +305,7 @@ header .account a:nth-child(2) svg {
 	color: var(--second-color);
 	font-size: 1.2rem;
 	font-weight: 900;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	transition: all 0.2s ease-in;
 }
 
@@ -329,6 +336,8 @@ header .account a:nth-child(2) svg {
 	width: 250px;
 	height: 400px;
 	color: var(--main-color);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
 }
 
 .products-section .cards-wrapper .card img {
@@ -420,7 +429,8 @@ header .account a:nth-child(2) svg {
 	border: solid 1px var(--border-color);
 	background-color: transparent;
 	padding: 30px;
-	border-radius: var(--border-radius-large)
+	border-radius: var(--border-radius-large);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .login h2 {
@@ -477,9 +487,9 @@ header .account a:nth-child(2) svg {
 	text-decoration: underline;
 }
 
-/* error */
+/* Alerts */
 
-.error {
+.error, .notification {
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -490,15 +500,23 @@ header .account a:nth-child(2) svg {
 	margin-top: 60px;
 }
 
-.error p {
+.error p, .notification p {
 	display: block;
 	width: fit-content;
-	background-color: red;
 	padding: 10px;
 	color: white;
 	font-size: 0.8rem;
 	border-radius: var(--border-radius-small);
 	margin-top: 30px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.error p {
+	background-color: red;
+}
+
+.notification p {
+	background-color: #158615;
 }
 
 /* Product Detail */
@@ -516,12 +534,13 @@ header .account a:nth-child(2) svg {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (max-width: 768px) {
-	.product-detail {
-		grid-template-rows: 1fr 1fr;
-		grid-template-columns: none;
-		margin-inline: 30px;
-	}
+.product-image {
+	border: solid 1px var(--border-color);
+	border-radius: var(--border-radius-large);
+	height: 100%;
+	width: 100%;
+	display: grid;
+	place-items: center;
 }
 
 .product-image img {
@@ -550,21 +569,7 @@ header .account a:nth-child(2) svg {
 	color: rgba(0, 0, 0, 0.7);
 }
 
-.btn {
-	height: 40px;
-	border: none;
-	border-radius: var(--border-radius-small);
-	padding: 12px 20px;
-	text-align: center;
-	background-color: var(--second-color);
-	color: var(--main-color);
-	font-size: 0.9rem;
-	font-weight: bold;
-	cursor: pointer;
-	transition: background 0.3s;
-}
-
-.btn:hover {
+.btn:active {
 	background-color: transparent;
 	border: solid 1px var(--second-color);
 	color: var(--second-color);
@@ -581,6 +586,8 @@ header .account a:nth-child(2) svg {
 .add-to-cart-form {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 20px;
 	justify-content: space-between;
 	align-items: center;
 	margin-top: 60px;
@@ -602,6 +609,34 @@ header .account a:nth-child(2) svg {
 	height: 30px;
 	border: 1px solid #ccc;
 	border-radius: var(--border-radius-small);
+}
+
+
+.btn {
+	height: 40px;
+	border: none;
+	border-radius: var(--border-radius-small);
+	padding: 12px 20px;
+	text-align: center;
+	background-color: var(--second-color);
+	color: var(--sub-color);
+	font-size: 0.9rem;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.btn:hover {
+	background-color: var(--button-hover-color);
+}
+
+
+@media screen and (max-width: 768px) {
+	.product-detail {
+		grid-template-rows: 1fr 1fr;
+		grid-template-columns: none;
+		margin-inline: 30px;
+	}
 }
 
 /* Cart */
@@ -657,6 +692,14 @@ td {
 	text-align: left;
 	padding: 8px;
 	border-bottom: 1px solid #ddd;
+}
+
+.cart-item-remove {
+	background-color: transparent;
+	border: none;
+	font-weight: 900;
+	color: red;
+	cursor: pointer;
 }
 
 .cart-bill-info {

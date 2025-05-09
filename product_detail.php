@@ -27,6 +27,28 @@ if ($result->num_rows === 0) {
 }
 
 $product = $result->fetch_assoc();
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Redirect to login page if not logged in
+  if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+  }
+
+  $product_id = intval($_POST['product_id']);
+  $quantity = intval($_POST['quantity']);
+  $user_id = $_SESSION['user_id'];
+
+  // Insert order into the orders table
+  $sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
+
+  $conn->query($sql);
+
+  $message = "Item addded to your cart.";
+  include "notification.php";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -40,16 +62,15 @@ $product = $result->fetch_assoc();
 <body>
   <main class="product-detail">
     <div class="product-image">
-      <img src="/assets/images/placeholder.jpg" alt="Product Image">
+      <?php echo "<img src='assets/images/products/" . $product['image'] . "' alt='placeholder-image'>"; ?>
     </div>
     <div class="product-info">
       <h2><?php echo $product['name']; ?></h2>
       <p class="product-price">$<?php echo $product['price']; ?></p>
       <p class="product-description"><?php echo $product['description']; ?></p>
 
-      <form method="POST" action="add_to_cart.php" class="add-to-cart-form">
+      <form method="POST" action="" class="add-to-cart-form">
         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-
         <div>
           <label for="quantity">Quantity:</label>
           <input type="number" id="quantity" name="quantity" value="1" min="1" required>

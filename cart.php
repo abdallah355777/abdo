@@ -33,13 +33,19 @@ if (isset($_POST['checkout'])) {
                                     VALUES ('$user_id', '$product_id', '$quantity', NOW())");
 
             if (!$insert) {
-                echo "<p>Error placing order: " . $conn->error . "</p>";
+                $message = "Error placing order: ' . $conn->error . '";
+                include "error.php";
             }
         }
-
+        
         // Clear the cart
         $conn->query("DELETE FROM cart WHERE user_id = '$user_id'");
         $checkoutSuccess = true;
+        
+        if ($checkoutSuccess) {
+            $message = "Order placed successfully!";
+            include "notification.php";
+        }
     }
 }
 ?>
@@ -48,9 +54,6 @@ if (isset($_POST['checkout'])) {
     <div class="cart-wrapper">
         <div class="cart-products-info">
             <div class="cart-products-list">
-                <?php if ($checkoutSuccess): ?>
-                    <p style="color: green; font-weight: bold;">✅ Order placed successfully!</p>
-                <?php endif; ?>
                 <table>
                     <tr>
                         <th>Name</th>
@@ -82,13 +85,13 @@ if (isset($_POST['checkout'])) {
                                 echo "<tr class='cart-item'>";
                                 echo "<td>" . htmlspecialchars($product_row['name']) . "</td>";
                                 echo "<td>" . intval($quantity) . "</td>";
-                                echo "<td>$" . number_format($product_row['price'], 2) . "</td>";
-                                echo "<td>
-                                        <form action='' method='POST'>
-                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                            <button type='submit' name='remove_item'>X</button>
-                                        </form>
-                                    </td>";
+                                echo "<td>$" . number_format($product_row['price'] * $quantity, 2) . "</td>";
+                                echo "<td>";
+                                echo "<form action='' method='POST'>";
+                                echo "<input type='hidden' name='item_id' value='" . $row['id'] . "'>";
+                                echo "<button type='submit' name='remove_item' class='cart-item-remove'>X</button>";
+                                echo "</form>";
+                                echo "</td>";
                                 echo "</tr>";
 
                                 $subtotal += $product_row['price'] * $quantity;

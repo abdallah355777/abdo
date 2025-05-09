@@ -1,6 +1,6 @@
 <?php
 
-if (isset($_POST['add_to_cart']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Redirect to login page if not logged in
   if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
