@@ -12,7 +12,7 @@ if (isset($_POST['add_to_cart']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
   $user_id = $_SESSION['user_id'];
 
   // Insert order into the orders table
-  $sql = "INSERT INTO orders (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
+  $sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
 
   $conn->query($sql);
 }

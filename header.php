@@ -10,7 +10,7 @@
 
 <body>
     <header class="header-wrapper">
-        <h1><a href="index.php">Abdo's Shop</a></h1>
+        <h1><a href="index.php">ABDO Shop</a></h1>
         <nav>
             <div>
                 <a href="index.php">Home</a>

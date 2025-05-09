@@ -1,32 +1,56 @@
 <?php
-// Include the header
 include 'header.php';
 
-// Start session for user check
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Redirect to login page if not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
-// Connect to the database
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "shop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Handle checkout
+$checkoutSuccess = false;
+if (isset($_POST['checkout'])) {
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT * FROM cart WHERE user_id = '$user_id'";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $product_id = $row['product_id'];
+            $quantity = $row['quantity'];
+
+            $insert = $conn->query("INSERT INTO orders (user_id, product_id, quantity, order_date) 
+                                    VALUES ('$user_id', '$product_id', '$quantity', NOW())");
+
+            if (!$insert) {
+                echo "<p>Error placing order: " . $conn->error . "</p>";
+            }
+        }
+
+        // Clear the cart
+        $conn->query("DELETE FROM cart WHERE user_id = '$user_id'");
+        $checkoutSuccess = true;
+    }
+}
 ?>
 
 <main class="cart">
-    <!-- <h2>Your Cart</h2> -->
     <div class="cart-wrapper">
         <div class="cart-products-info">
             <div class="cart-products-list">
+                <?php if ($checkoutSuccess): ?>
+                    <p style="color: green; font-weight: bold;">✅ Order placed successfully!</p>
+                <?php endif; ?>
                 <table>
                     <tr>
                         <th>Name</th>
@@ -36,19 +60,14 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                     </tr>
                     <?php
                     $subtotal = 0;
+                    $user_id = $_SESSION['user_id'];
 
-                    $user_id = $_SESSION['user_id'] ?? null;
-
-                    $sql_orders = "SELECT * FROM orders WHERE user_id = '$user_id'";
+                    $sql_orders = "SELECT * FROM cart WHERE user_id = '$user_id'";
                     $result_orders = $conn->query($sql_orders);
 
-
-                    if (isset($_POST['remove_item']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if (isset($_POST['remove_item']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
                         $item_id = intval($_POST['item_id']);
-
-                        // Delete Item from cart table
-                        $sql = "DELETE FROM orders WHERE id = '$item_id'";
-                        $conn->query($sql);
+                        $conn->query("DELETE FROM cart WHERE id = '$item_id'");
                     }
 
                     if ($result_orders && $result_orders->num_rows > 0) {
@@ -66,16 +85,14 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                                 echo "<td>$" . number_format($product_row['price'], 2) . "</td>";
                                 echo "<td>
                                         <form action='' method='POST'>
-                                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                        <button type='submit' name='remove_item'>X</button>
+                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                                            <button type='submit' name='remove_item'>X</button>
                                         </form>
                                     </td>";
                                 echo "</tr>";
-                            } else {
-                                echo "<p>Product not found.</p>";
-                            }
 
-                            $subtotal += $product_row['price'] * $quantity;
+                                $subtotal += $product_row['price'] * $quantity;
+                            }
                         }
                     }
                     ?>
@@ -83,42 +100,27 @@ $conn = new mysqli($servername, $username, $password, $dbname);
             </div>
         </div>
         <div class="cart-bill-info">
-
             <table>
                 <tr>
                     <td>Subtotal</td>
-                    <td>
-                        <?php
-                        echo "$" . number_format($subtotal, 2);
-                        ?>
-                    </td>
+                    <td><?php echo "$" . number_format($subtotal, 2); ?></td>
                 </tr>
                 <tr>
                     <td>Tax (10%)</td>
-                    <td>
-                        <?php
-                        $tax = $subtotal * 0.1;
-                        echo "$" . number_format($tax, 2);
-                        ?>
-                    </td>
+                    <td><?php echo "$" . number_format($subtotal * 0.1, 2); ?></td>
                 </tr>
                 <tr>
                     <td>Total</td>
-                    <td>
-                        <?php
-                        echo "$" . number_format($subtotal + $tax, 2);
-                        ?>
-                    </td>
+                    <td><?php echo "$" . number_format($subtotal * 1.1, 2); ?></td>
                 </tr>
             </table>
             <div class="cart-order">
-                <button>Checkout ></button>
+                <form method="POST">
+                    <button type="submit" name="checkout">Checkout ></button>
+                </form>
             </div>
         </div>
     </div>
 </main>
 
-<?php
-// Include the footer
-include 'footer.php';
-?>
+<?php include 'footer.php'; ?>

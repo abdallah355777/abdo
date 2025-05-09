@@ -322,8 +322,6 @@ header .account a:nth-child(2) svg {
 	margin-block-end: 60px;
 }
 
-
-
 .products-section .cards-wrapper .card {
 	border: solid 1px var(--border-color);
 	border-radius: var(--border-radius-large);
