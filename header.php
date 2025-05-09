@@ -8,14 +8,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+<?php
+$current = basename($_SERVER['PHP_SELF']);
+?>
+
 <body>
     <header class="header-wrapper">
         <h1><a href="index.php">ABDO Shop</a></h1>
         <nav>
             <div>
-                <a href="index.php">Home</a>
-                <a href="all_products.php">Products</a>
-                <a href="admin_login.php">Admin Portal</a>
+                <a href="index.php" class="<?= $current === 'index.php' ? 'active' : '' ?>">Home</a>
+                <a href="all_products.php" class="<?= $current === 'all_products.php' ? 'active' : '' ?>">Products</a>
+                <a href="admin_login.php" class="<?= $current === 'admin_login.php' ? 'active' : '' ?>">Admin Portal</a>
             </div>
         </nav>
         <?php
