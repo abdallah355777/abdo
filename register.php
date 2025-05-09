@@ -1,6 +1,6 @@
 <?php
 // Include the header
-include('header.php');
+include 'header.php';
 
 // Connect to the database
 $servername = "localhost";
@@ -28,15 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($check_result->num_rows > 0) {
         // Email already exists
-        echo "<p style='color:red;'>Email is already registered. Please use a different one.</p>";
+        $message = "Email is already registered. Please use a different one.";
+        include "error.php";
     } else {
         // Insert data into the users table
         $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', 'customer')";
 
         if ($conn->query($sql) === TRUE) {
-            echo "<p style='color:green;'>Registration successful! <a href='login.php'>Login here</a></p>";
+            header('Location: index.php');
+            exit();
         } else {
-            echo "<p style='color:red;'>Error: " . $conn->error . "</p>";
+            $message = " . $conn->error . ";
+            include "error.php";
         }
     }
 }
@@ -61,5 +64,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php
 // Include the footer
-include('footer.php');
+include 'footer.php';
 ?>

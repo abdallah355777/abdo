@@ -35,15 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         } else {
             $message = "Invalid password!";
+            include "error.php";
         }
     } else {
         $message = "No admin user found with this email!";
+        include "error.php";
     }
 }
 ?>
 
 <section class="login">
-    <p><?php echo htmlspecialchars($message); ?></p>
     <div>
         <h2>Admin Portal</h2>
         <form method="POST">
