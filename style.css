@@ -51,10 +51,6 @@ h3 {
 	body {
 		padding-inline: 10px;
 	}
-
-	header nav {
-		display: none;
-	}
 }
 
 /* Header */
@@ -144,6 +140,86 @@ header .account a:nth-child(2) svg {
 
 .header-login-btn:hover {
 	background-color: #e49466;
+}
+
+
+.header-container {
+	position: relative;
+}
+
+.hum-menu {
+	display: none;
+	cursor: pointer;
+}
+
+.hum-menu svg {
+	width: 30px;
+	height: 30px;
+	transition: all .3s ease-in-out;
+}
+
+.hum-menu svg:hover {
+	transform: scale(1.1);
+}
+
+#navMenu {
+	display: none;
+	z-index: -5;
+}
+
+#navMenu.show-navMenu {
+	display: block;
+	width: 90%;
+	height: 300px;
+	background-color: #141414;
+	position: absolute;
+	top: 0%;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: 100px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	z-index: 5;
+}
+
+
+.show-navMenu div {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 30px;
+}
+
+.show-navMenu div a {
+	color: white;
+	font-size: 0.9rem;
+	font-weight: bold;
+}
+
+.show-navMenu a.active {
+	text-decoration: underline;
+	transition: all .3s;
+}
+
+.show-navMenu div a:hover {
+	text-decoration: underline;
+}
+
+@media screen and (max-width: 767px) {
+	header nav {
+		display: none;
+	}
+
+	.hum-menu {
+		display: block;
+	}
+
+	#navMenu {
+		display: none;
+		z-index: -5;
+	}
 }
 
 /* Hero Banner */
